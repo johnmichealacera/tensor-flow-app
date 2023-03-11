@@ -12,7 +12,9 @@
     "vue": "^3.2.13",
     "@tensorflow-models/coco-ssd": "^2.2.2",
     "@tensorflow/tfjs-backend-cpu": "^3.21.0",
-    "@tensorflow/tfjs-backend-webgl": "^3.21.0"
+    "@tensorflow/tfjs-backend-webgl": "^3.21.0",
+    "@tensorflow/tfjs-converter": "^3.3.0",
+    "@tensorflow/tfjs-core": "^3.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

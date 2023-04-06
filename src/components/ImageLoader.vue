@@ -15,6 +15,7 @@ export default {
 <style>
 .image-loading-spinner {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 300px;

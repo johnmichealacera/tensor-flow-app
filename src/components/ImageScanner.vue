@@ -73,6 +73,7 @@ export default {
     };
 
     onMounted(async () => {
+      isLoadingModel.value = true;
       cocoSsdModel = await cocoSsd.load();
       isLoadingModel.value = false;
     })

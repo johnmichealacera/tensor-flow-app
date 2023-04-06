@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div>
+    <ImageLoader v-if="isLoadingModel" />
+    <div v-if="!isLoadingModel">
         <label for="avatar">Choose a picture:</label>
         <input @change="getChange($event)" type="file" id="avatar" name="avatar" accept="image/*">
     </div>
@@ -8,7 +9,6 @@
       <img id="img_to_detect">
       <canvas id="detect_result" v-if="!isLoadingScannedImage"></canvas>
     </div>
-    <ImageLoader :isloadingScannedImage="isLoadingScannedImage" />
   </div>
 </template>
 
@@ -17,7 +17,7 @@
 import '@tensorflow/tfjs-backend-cpu';
 import '@tensorflow/tfjs-backend-webgl';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import ImageLoader from './ImageLoader.vue';
 export default {
   name: 'ImageScanner',
@@ -28,7 +28,8 @@ export default {
     ImageLoader,
   },
   setup() {
-    let cocoSsdModel = null;
+    let cocoSsdModel;
+    const isLoadingModel = ref(true);
     const isLoadingScannedImage = ref(false);
 
     const getChange = (e) => {
@@ -41,38 +42,47 @@ export default {
     };
 
     const getDetect = async (img) => {
-      // get detection result
-      cocoSsdModel = await cocoSsd.load();
-      const result = await cocoSsdModel.detect(img);
-      const canvas = document.getElementById('detect_result');
-      console.log('img.width', img.width);
-      const color=["red","white","blue"]
-      canvas.width=img.width ;
-      canvas.height=img.height ;
-      const context = canvas.getContext('2d');
-      context.drawImage(img, 0, 0, img.width,img.height);
-      context.font = '40px Arial';
+      img.onload = async () => {
+        if (img.width > 0 && img.height > 0) {
+          // get detection result
+          const result = await cocoSsdModel.detect(img);
+          const canvas = document.getElementById('detect_result');
+          const color=["red","white","blue"]
+          canvas.width=img.width ;
+          canvas.height=img.height ;
+          const context = canvas.getContext('2d');
+          context.drawImage(img, 0, 0, img.width,img.height);
+          context.font = '40px Arial';
 
-      for (let i = 0; i < result.length; i++) {
-          context.beginPath();
-          context.rect(...result[i].bbox);
-          context.lineWidth = 5;
-          context.strokeStyle = color[i%3];
-          context.fillStyle = color[i%3];
-          context.font = "10px Verdana";
-          context.stroke();
-          context.fillText(
-            result[i].score.toFixed(3) + ' ' + result[i].class, 
-            result[i].bbox[0] + 5,
-            result[i].bbox[1] + 15);
+          for (let i = 0; i < result.length; i++) {
+            context.beginPath();
+            context.rect(...result[i].bbox);
+            context.lineWidth = 5;
+            context.strokeStyle = color[i%3];
+            context.fillStyle = color[i%3];
+            context.font = "10px Verdana";
+            context.stroke();
+            context.fillText(
+              result[i].score.toFixed(3) + ' ' + result[i].class, 
+              result[i].bbox[0] + 5,
+              result[i].bbox[1] + 15);
+          }
+          return result;
+        }
       }
-      return result
     };
+
+    onMounted(async () => {
+      cocoSsdModel = await cocoSsd.load();
+      isLoadingModel.value = false;
+    })
 
     return {
       getChange,
       getDetect,
       isLoadingScannedImage,
+      cocoSsdModel,
+      isLoadingModel,
     };
   },
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="image-loading-spinner" v-if="isloadingScannedImage">
+  <div class="image-loading-spinner">
     <div class="spinner">
     </div>
   </div>
@@ -8,9 +8,6 @@
 <script>
 export default {
   name: 'ImageLoader',
-  props: {
-    isloadingScannedImage: Boolean,
-  },
 };
 </script>
 

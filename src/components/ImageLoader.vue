@@ -1,6 +1,6 @@
 <template>
   <div class="image-loading-spinner">
-    <span>Loading image scanning resources...</span>
+    <h1>Loading image scanning resources...</h1>
     <div class="spinner">
     </div>
   </div>

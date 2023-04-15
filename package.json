@@ -1,9 +1,9 @@
 {
   "name": "tsflow-vue",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "John Micheal Acera",
   "keywords": ["image scan", "tensor-flow", "image detection"],
-  "private": true,
+  "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

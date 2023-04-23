@@ -1,0 +1,8 @@
+services:
+  - name: tsflowapp
+    image: tsflowapp
+    envVars:
+      - key: NODE_ENV
+        value: production
+    httpPort: 3000
+    internalPort: 8080
